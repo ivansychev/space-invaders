@@ -10,7 +10,6 @@ export class MenuScene extends Phaser.Scene {
   }
 
   init(): void {
-    console.log('init')
     this.startKey = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.S
     );
@@ -19,9 +18,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   create(): void {
-    console.log('create')
-
-    this.bitmapTexts.push(
+   this.bitmapTexts.push(
       this.add.bitmapText(
         this.sys.canvas.width / 2 - 75,
         this.sys.canvas.height - 40,
@@ -51,9 +48,7 @@ export class MenuScene extends Phaser.Scene {
         )
     );
 
-    console.log(this.bitmapTexts)
     this.interval = setInterval(()=>{
-      console.log('interval')
       this.bitmapTexts[0].text ? this.bitmapTexts[0].setText("") : this.bitmapTexts[0].setText("PRESS S TO PLAY")
     },700)
   }
