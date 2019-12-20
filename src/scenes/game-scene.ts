@@ -87,11 +87,11 @@ export class GameScene extends Phaser.Scene {
 
   private checkCollisions(): void {
     this.physics.overlap(
-      this.player.getBullets(),
-      this.enemies,
-      this.bulletHitEnemy,
-      null,
-      this
+        this.player.getBullets(),
+        this.enemies,
+        this.bulletHitEnemy,
+        null,
+        this
     );
   }
 

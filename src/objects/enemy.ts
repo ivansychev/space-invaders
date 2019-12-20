@@ -33,7 +33,6 @@ export class Enemy extends Phaser.GameObjects.Sprite {
 
   private initVariables(params): void {
     this.bullets = this.scene.add.group({
-      maxSize: 10,
       runChildUpdate: true
     });
     this.enemyType = params.key;
@@ -62,7 +61,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
         this.dyingTime = 140;
         this.enemyTint = 0x4a4e4d;
         this.lives = 2;
-        this.reloadTime = 6000;
+        this.reloadTime = 2000;
         this.valueKill = 60;
 
         break;

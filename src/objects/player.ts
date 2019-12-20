@@ -57,10 +57,10 @@ export class Player extends Phaser.GameObjects.Image {
   private handleFlying(): void {
     if (
       this.cursors.right.isDown &&
-      this.x < this.scene.sys.canvas.width - this.width / 2
+      this.x < this.scene.sys.canvas.width - this.width
     ) {
       this.body.setVelocityX(this.flyingSpeed);
-    } else if (this.cursors.left.isDown && this.x > this.width / 2) {
+    } else if (this.cursors.left.isDown && this.x > this.width) {
       this.body.setVelocityX(-this.flyingSpeed);
     } else {
       this.body.setVelocityX(0);

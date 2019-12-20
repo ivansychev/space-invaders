@@ -1,8 +1,9 @@
 import "phaser";
 import { BootScene } from "./scenes/boot-scene";
-import { GameScene } from "./scenes/game-scene";
 import { HUDScene } from "./scenes/hud-scene";
 import { MenuScene } from "./scenes/menu-scene";
+import { GameScene } from "./scenes/game-scene";
+import { EndlessScene } from "./scenes/endless-scene";
 
 const config: Phaser.Types.Core.GameConfig = {
   title: "Space Invaders",
@@ -12,7 +13,7 @@ const config: Phaser.Types.Core.GameConfig = {
   zoom: 3,
   type: Phaser.AUTO,
   parent: "game",
-  scene: [BootScene, MenuScene, GameScene, HUDScene],
+  scene: [BootScene, MenuScene, GameScene, HUDScene, EndlessScene],
   input: {
     keyboard: true
   },

@@ -12,7 +12,7 @@ export class HUDScene extends Phaser.Scene {
   }
 
   create(): void {
-    // create bitmap texts
+
     this.bitmapTexts.push(
       this.add.bitmapText(
         10,
@@ -22,6 +22,7 @@ export class HUDScene extends Phaser.Scene {
         8
       )
     );
+
     this.bitmapTexts.push(
       this.add.bitmapText(
         10,
@@ -31,6 +32,18 @@ export class HUDScene extends Phaser.Scene {
         8
       )
     );
+
+    this.bitmapTexts.push(
+        this.add.bitmapText(
+            10,
+            20,
+            "font",
+            this.registry.get("endless"),
+            6
+        )
+    );
+
+    this.bitmapTexts[2].tint = 0xde4747;
 
     // create events
     const level = this.scene.get("GameScene");
