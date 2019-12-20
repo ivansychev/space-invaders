@@ -54,8 +54,13 @@ export class BootScene extends Phaser.Scene {
     );
   }
 
+  init() : void{
+      this.initRegistry()
+  }
+
   update(): void {
     this.scene.start("MenuScene");
+    this.scene.stop("BootScene");
   }
 
   private createLoadingbar(): void {
@@ -69,4 +74,9 @@ export class BootScene extends Phaser.Scene {
     );
     this.progressBar = this.add.graphics();
   }
+
+    private initRegistry(): void {
+        this.registry.set("status", { title: "SPACE INVADERS", offsetX: 70 });
+        this.registry.set("score", { title: null, value: null });
+    }
 }

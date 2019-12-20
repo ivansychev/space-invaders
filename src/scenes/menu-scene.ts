@@ -1,6 +1,7 @@
 export class MenuScene extends Phaser.Scene {
   private startKey: Phaser.Input.Keyboard.Key;
   private bitmapTexts: Phaser.GameObjects.BitmapText[] = [];
+  private interval: NodeJS.Timeout;
 
   constructor() {
     super({
@@ -9,6 +10,7 @@ export class MenuScene extends Phaser.Scene {
   }
 
   init(): void {
+    console.log('init')
     this.startKey = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.S
     );
@@ -17,32 +19,53 @@ export class MenuScene extends Phaser.Scene {
   }
 
   create(): void {
+    console.log('create')
+
     this.bitmapTexts.push(
       this.add.bitmapText(
-        this.sys.canvas.width / 2 - 65,
-        this.sys.canvas.height / 2,
+        this.sys.canvas.width / 2 - 75,
+        this.sys.canvas.height - 40,
         "font",
-        "PRESS S TO PLAY",
-        8
+          "PRESS S TO PLAY",
+        10
       )
     );
 
     this.bitmapTexts.push(
       this.add.bitmapText(
-        this.sys.canvas.width / 2 - 60,
-        this.sys.canvas.height / 2 - 40,
+        this.sys.canvas.width / 2 - this.registry.get("status").offsetX,
+        this.sys.canvas.height / 2 - 10,
         "font",
-        "SPACE INVADERS",
-        8
+          this.registry.get("status").title,
+        10
       )
     );
+
+    this.bitmapTexts.push(
+        this.add.bitmapText(
+            this.sys.canvas.width / 2 - 75,
+            35,
+            "font",
+            this.registry.get("score").title ? `${this.registry.get("score").title}: ${this.registry.get("score").value}` : "",
+            10
+        )
+    );
+
+    console.log(this.bitmapTexts)
+    this.interval = setInterval(()=>{
+      console.log('interval')
+      this.bitmapTexts[0].text ? this.bitmapTexts[0].setText("") : this.bitmapTexts[0].setText("PRESS S TO PLAY")
+    },700)
   }
 
   update(): void {
     if (this.startKey.isDown) {
+      clearInterval(this.interval);
+      this.bitmapTexts = [];
       this.scene.start("HUDScene");
       this.scene.start("GameScene");
       this.scene.bringToTop("HUDScene");
+      this.scene.stop("MenuScene")
     }
   }
 

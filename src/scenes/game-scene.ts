@@ -70,9 +70,18 @@ export class GameScene extends Phaser.Scene {
       this.checkCollisions();
     }
 
-    if (this.registry.get("lives") < 0 || this.enemies.getLength() === 0) {
-      this.scene.start("MenuScene");
+    if (this.registry.get("lives") < 0) {
+      this.registry.set("status", { title: "Game Over!", offsetX: 50 })
+      this.registry.set("score", { title: null, value: null })
       this.scene.stop("HUDScene");
+      this.scene.start("MenuScene");
+    }
+
+    if(this.enemies.getLength() === 0){
+      this.registry.set("status", { title: "You Win!", offsetX: 40 })
+      this.registry.set("score", { title: "Your Score", value: this.registry.get("points") })
+      this.scene.stop("HUDScene");
+      this.scene.start("MenuScene");
     }
   }
 
