@@ -16,7 +16,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   create(): void {
-    // create game objects
     this.player = new Player({
       scene: this,
       x: this.sys.canvas.width / 2,
@@ -24,10 +23,10 @@ export class GameScene extends Phaser.Scene {
       key: "player"
     });
 
-    // if you want to make it random:
-    // let enemyTypes = ["octopus", "crab", "squid"];
+    const rowLength = 10;
+
     for (let y = 0; y < 5; y++) {
-      for (let x = 0; x < 10; x++) {
+      for (let x = 0; x < rowLength; x++) {
         let type;
         if (y === 0) {
           type = "squid";
@@ -36,14 +35,14 @@ export class GameScene extends Phaser.Scene {
         } else {
           type = "octopus";
         }
-        // if you want to make it random:
-        // let type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+
         this.enemies.add(
           new Enemy({
             scene: this,
             x: 20 + x * 15,
             y: 50 + y * 15,
-            key: type
+            key: type,
+            rowLength: 10
           })
         );
       }
@@ -68,6 +67,7 @@ export class GameScene extends Phaser.Scene {
       }, this);
 
       this.checkCollisions();
+      this.checkCollisionWithEnemy();
     }
 
     if (this.registry.get("lives") < 0) {
@@ -95,6 +95,16 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
+  private checkCollisionWithEnemy(): void {
+    this.physics.overlap(
+        this.player,
+        this.enemies,
+        this.enemyCollidesWithPlayer,
+        null,
+        this
+    );
+  }
+
   private bulletHitEnemy(bullet, enemy): void {
     bullet.destroy();
     enemy.gotHurt();
@@ -103,5 +113,9 @@ export class GameScene extends Phaser.Scene {
   private bulletHitPlayer(bullet, player): void {
     bullet.destroy();
     player.gotHurt();
+  }
+
+  private enemyCollidesWithPlayer(player): void {
+    player.gotKilled();
   }
 }

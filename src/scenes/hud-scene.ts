@@ -49,6 +49,10 @@ export class HUDScene extends Phaser.Scene {
     const level = this.scene.get("GameScene");
     level.events.on("pointsChanged", this.updatePoints, this);
     level.events.on("livesChanged", this.updateLives, this);
+
+    const endless = this.scene.get("EndlessScene");
+    endless.events.on("pointsChanged", this.updatePoints, this);
+    endless.events.on("livesChanged", this.updateLives, this);
   }
 
   private updatePoints() {

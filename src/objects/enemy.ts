@@ -11,6 +11,8 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   private moveTween: Phaser.Tweens.Tween;
   private reloadTime: number;
   private valueKill: number;
+  private rowLength: number;
+  private poweredUp: boolean;
 
   /* Phaser body type workaround */
   body!: Phaser.Physics.Arcade.Body;
@@ -38,33 +40,61 @@ export class Enemy extends Phaser.GameObjects.Sprite {
     this.enemyType = params.key;
     this.hurtingTime = 200;
     this.isHurt = false;
+    this.rowLength = params.rowLength;
+    this.poweredUp = params.poweredUp;
 
-    // set the characteristics of the specific enemy
-    switch (this.enemyType) {
-      case "octopus":
-        this.dyingTime = 100;
-        this.enemyTint = 0xffffff;
-        this.lives = 1;
-        this.reloadTime = 7500;
-        this.valueKill = 20;
-        break;
+    if(this.poweredUp){
+      switch (this.enemyType) {
+        case "octopus":
+          this.dyingTime = 160;
+          this.enemyTint = 0xc93c3c;
+          this.lives = 2;
+          this.reloadTime = 1000;
+          this.valueKill = 100;
+          break;
 
-      case "crab":
-        this.dyingTime = 120;
-        this.enemyTint = 0x42a4aa;
-        this.lives = 2;
-        this.reloadTime = 9000;
-        this.valueKill = 40;
-        break;
+        case "crab":
+          this.dyingTime = 180;
+          this.enemyTint = 0xd16634;
+          this.lives = 3;
+          this.reloadTime = 2000;
+          this.valueKill = 150;
+          break;
 
-      case "squid":
-        this.dyingTime = 140;
-        this.enemyTint = 0x4a4e4d;
-        this.lives = 2;
-        this.reloadTime = 2000;
-        this.valueKill = 60;
+        case "squid":
+          this.dyingTime = 200;
+          this.enemyTint = 0xdb0700;
+          this.lives = 4;
+          this.reloadTime = 1500;
+          this.valueKill = 200;
+          break;
+      }
+    }else {
+      switch (this.enemyType) {
+        case "octopus":
+          this.dyingTime = 100;
+          this.enemyTint = 0xffffff;
+          this.lives = 1;
+          this.reloadTime = 6000;
+          this.valueKill = 20;
+          break;
 
-        break;
+        case "crab":
+          this.dyingTime = 120;
+          this.enemyTint = 0x42a4aa;
+          this.lives = 2;
+          this.reloadTime = 8000;
+          this.valueKill = 40;
+          break;
+
+        case "squid":
+          this.dyingTime = 140;
+          this.enemyTint = 0x4a4e4d;
+          this.lives = 2;
+          this.reloadTime = 5000;
+          this.valueKill = 60;
+          break;
+      }
     }
   }
 
@@ -82,11 +112,17 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   private initTweens(): void {
     this.moveTween = this.scene.tweens.add({
       targets: this,
-      x: this.x + 120,
-      ease: "Power0",
-      duration: 5000,
+      props:{
+        x: {
+          value: this.x + 120 + (10 - this.rowLength) * 15,
+          duration: 5000,
+          ease: 'Power0',
+          repeat: -1 }
+      },
       yoyo: true,
-      repeat: -1
+      onYoyo: () => {
+        this.y += 10;
+      },
     });
   }
 
@@ -102,7 +138,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
             y: this.y,
             key: "bullet",
             bulletProperties: {
-              speed: 100
+              speed: this.poweredUp ? 200 : 100
             }
           })
         );

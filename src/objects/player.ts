@@ -97,4 +97,9 @@ export class Player extends Phaser.GameObjects.Image {
     this.x = this.scene.sys.canvas.width / 2;
     this.y = this.scene.sys.canvas.height - 40;
   }
+
+  public gotKilled(): void {
+    this.scene.registry.set("lives", -1);
+    this.scene.events.emit("livesChanged");
+  }
 }
