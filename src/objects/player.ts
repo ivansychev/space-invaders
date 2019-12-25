@@ -1,11 +1,15 @@
 import { Bullet } from "./bullet";
+import { Rocket } from "./rocket";
 
 export class Player extends Phaser.GameObjects.Image {
   private bullets: Phaser.GameObjects.Group;
+  private rockets: Phaser.GameObjects.Group;
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   private flyingSpeed: number;
   private lastShoot: number;
   private shootingKey: Phaser.Input.Keyboard.Key;
+  private rocketKey: Phaser.Input.Keyboard.Key;
+  private endlessMode: boolean;
 
   /* Phaser body type workaround */
   body!: Phaser.Physics.Arcade.Body;
@@ -14,10 +18,14 @@ export class Player extends Phaser.GameObjects.Image {
     return this.bullets;
   }
 
+  public getRockets(): Phaser.GameObjects.Group {
+    return this.rockets;
+  }
+
   constructor(params) {
     super(params.scene, params.x, params.y, params.key);
 
-    this.initVariables();
+    this.initVariables(params);
     this.initImage();
     this.initInput();
     this.initPhysics();
@@ -25,12 +33,16 @@ export class Player extends Phaser.GameObjects.Image {
     this.scene.add.existing(this);
   }
 
-  private initVariables(): void {
+  private initVariables(params): void {
     this.bullets = this.scene.add.group({
+      runChildUpdate: true
+    });
+    this.rockets = this.scene.add.group({
       runChildUpdate: true
     });
     this.lastShoot = 0;
     this.flyingSpeed = 100;
+    this.endlessMode = params.endlessMode
   }
 
   private initImage(): void {
@@ -42,6 +54,11 @@ export class Player extends Phaser.GameObjects.Image {
     this.shootingKey = this.scene.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
     );
+    if(this.endlessMode){
+      this.rocketKey = this.scene.input.keyboard.addKey(
+          Phaser.Input.Keyboard.KeyCodes.R
+      );
+    }
   }
 
   private initPhysics(): void {
@@ -52,6 +69,9 @@ export class Player extends Phaser.GameObjects.Image {
   update(): void {
     this.handleFlying();
     this.handleShooting();
+    if(this.endlessMode){
+      this.handleRocketing();
+    }
   }
 
   private handleFlying(): void {
@@ -80,6 +100,26 @@ export class Player extends Phaser.GameObjects.Image {
               speed: -300
             }
           })
+        );
+
+        this.lastShoot = this.scene.time.now + 500;
+      }
+    }
+  }
+
+  private handleRocketing(): void{
+    if (this.rocketKey.isDown && this.scene.time.now > this.lastShoot) {
+      if (this.rockets.getLength() < 1) {
+        this.rockets.add(
+            new Rocket({
+              scene: this.scene,
+              x: this.x,
+              y: this.y - this.height,
+              key: "rocket",
+              rocketProperties: {
+                speed: -50
+              }
+            })
         );
 
         this.lastShoot = this.scene.time.now + 500;

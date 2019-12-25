@@ -65,6 +65,28 @@
       },
       "repeat": 0,
       "frameRate": 4
+    },
+    {
+      "key": "rocketFly",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "rocket",
+        "start": 0,
+        "end": 1
+      },
+      "repeat": -1,
+      "frameRate": 4
+    },
+    {
+      "key": "rocketExplode",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "rocket",
+        "start": 2,
+        "end": 2
+      },
+      "repeat": 0,
+      "frameRate": 4
     }
   ]
 }

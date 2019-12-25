@@ -20,7 +20,8 @@ export class GameScene extends Phaser.Scene {
       scene: this,
       x: this.sys.canvas.width / 2,
       y: this.sys.canvas.height - 40,
-      key: "player"
+      key: "player",
+      endlessMode: false
     });
 
     const rowLength = 10;

@@ -21,7 +21,8 @@ export class EndlessScene extends Phaser.Scene {
             scene: this,
             x: this.sys.canvas.width / 2,
             y: this.sys.canvas.height - 40,
-            key: "player"
+            key: "player",
+            endlessMode: true
         });
 
         this.spawnRandomEnemies();
@@ -31,21 +32,9 @@ export class EndlessScene extends Phaser.Scene {
     update(): void {
         if (this.player.active) {
             this.player.update();
-
-            this.enemies.children.each((enemy: Enemy) => {
-                enemy.update();
-                if (enemy.getBullets().getLength() > 0) {
-                    this.physics.overlap(
-                        enemy.getBullets(),
-                        this.player,
-                        this.bulletHitPlayer,
-                        null,
-                        this
-                    );
-                }
-            }, this);
-
-            this.checkCollisions();
+            this.checkEnemyBulletsCollision();
+            this.checkPlayerBulletsCollision();
+            this.checkRocketCollision();
             this.checkCollisionWithEnemy();
         }
 
@@ -58,11 +47,36 @@ export class EndlessScene extends Phaser.Scene {
         }
     }
 
-    private checkCollisions(): void {
+    private checkEnemyBulletsCollision(): void{
+        this.enemies.children.each((enemy: Enemy) => {
+            enemy.update();
+            if (enemy.getBullets().getLength() > 0) {
+                this.physics.overlap(
+                    enemy.getBullets(),
+                    this.player,
+                    this.bulletHitPlayer,
+                    null,
+                    this
+                );
+            }
+        }, this);
+    }
+
+    private checkPlayerBulletsCollision(): void {
         this.physics.overlap(
             this.player.getBullets(),
             this.enemies,
             this.bulletHitEnemy,
+            null,
+            this
+        );
+    }
+
+    private checkRocketCollision(): void {
+        this.physics.overlap(
+            this.player.getRockets(),
+            this.enemies,
+            this.rocketHitsEnemy,
             null,
             this
         );
@@ -81,6 +95,15 @@ export class EndlessScene extends Phaser.Scene {
     private bulletHitEnemy(bullet, enemy): void {
         bullet.destroy();
         enemy.gotHurt();
+    }
+
+    private rocketHitsEnemy(rocket, enemy): void {
+        if(rocket.madeHit()){
+            //do nothing
+        } else{
+            rocket.initiateDestroySequence();
+            enemy.gotHurt();
+        }
     }
 
     private bulletHitPlayer(bullet, player): void {
@@ -103,14 +126,14 @@ export class EndlessScene extends Phaser.Scene {
     private spawnRandomEnemies(): void{
         const enemyTypes = ["octopus", "crab", "squid"];
         const enemyRowLength = this.getRandomPositiveInt(10);
-        for (let y = 0; y < 1; y++) {
+        for (let y = 0; y < 10; y++) {
             for (let x = 0; x < enemyRowLength; x++) {
                 let type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
                 this.enemies.add(
                     new Enemy({
                         scene: this,
                         x: 20 + x * 15,
-                        y: 10,
+                        y: 10 + y * 15,
                         key: type,
                         rowLength: enemyRowLength,
                         poweredUp: Math.random() > 0.85,
