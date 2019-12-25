@@ -2,7 +2,8 @@ export class HUDScene extends Phaser.Scene {
   private bitmapTexts: Phaser.GameObjects.BitmapText[];
   private ammoProgress: Phaser.GameObjects.Graphics;
   private ammoRefillTimeout: NodeJS.Timeout;
-  private ammoNeedsRefill: boolean = false;
+  private isRefilling: boolean = false;
+  private refillStack: number[] = [];
 
   constructor() {
     super({
@@ -81,35 +82,45 @@ export class HUDScene extends Phaser.Scene {
 
   private updateAmmo() {
     if(this.registry.get("ammo") < 3){
-      this.ammoNeedsRefill = true;
+      this.refillStack.push(1)
     }
+
+    this.bitmapTexts[3].setText(`${this.registry.get("rockets")}${this.registry.get("ammo")}`);
+  }
+
+  private incrementAmmo() {
+    this.registry.set('ammo', this.registry.get('ammo') + 1);
     this.bitmapTexts[3].setText(`${this.registry.get("rockets")}${this.registry.get("ammo")}`);
   }
 
   update(): void{
-    if(this.ammoNeedsRefill){
-      this.ammoNeedsRefill = false;
-      this.refillAmmo(10)
+    if(!this.isRefilling && this.refillStack.shift()){
+      this.isRefilling = true;
+      this.refillAmmo(30, 30)
     }
   }
 
-  private refillAmmo(seconds): void {
+  private refillAmmo(acc, seconds): void {
     this.ammoRefillTimeout = setTimeout(()=>{
-      console.log(seconds)
-      this.ammoProgress.fillRect(
-          this.scene.systems.canvas.width - 117,
-          this.scene.systems.canvas.height - 10,
-          100 * ((10 - seconds + 1)/10), 1);
-
-      if(seconds <= 1){
-        this.ammoProgress.fillRect(
-            this.scene.systems.canvas.width - 117,
-            this.scene.systems.canvas.height - 10,
-            100 * ((10 - seconds + 1)/10), 1);
+      this.fillRectTick(acc, seconds, 0xffffff);
+      if(acc <= 1){
+        setTimeout(()=>{
+          this.fillRectTick(acc, seconds, 0xf5cc69);
+          this.incrementAmmo()
+        },250)
         clearTimeout(this.ammoRefillTimeout)
+        this.isRefilling = false;
       }else{
-        this.refillAmmo(seconds - 1)
+        this.refillAmmo(acc - 1, seconds)
       }
     },1000)
+  }
+
+  private fillRectTick(acc, seconds, color){
+    this.ammoProgress.fillStyle(color);
+    this.ammoProgress.fillRect(
+        this.scene.systems.canvas.width - 117,
+        this.scene.systems.canvas.height - 10,
+        100 * ((seconds - acc + 1)/seconds), 1);
   }
 }

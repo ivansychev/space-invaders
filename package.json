@@ -1,6 +1,6 @@
 {
   "name": "space-invaders",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "dependencies": {
     "phaser": "3.21.0"
   },
