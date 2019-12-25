@@ -36,6 +36,7 @@ export class Rocket extends Phaser.GameObjects.Sprite {
 
     public initiateDestroySequence() {
         this.hit = true;
+        this.body.setSize(40, 40);
     }
 
     update(): void {

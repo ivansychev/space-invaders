@@ -1,6 +1,6 @@
 {
-  "name": "tanks-io",
-  "version": "0.0.0",
+  "name": "space-invaders",
+  "version": "0.1.0",
   "dependencies": {
     "phaser": "3.21.0"
   },

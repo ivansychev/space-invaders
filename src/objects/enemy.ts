@@ -13,6 +13,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
   private valueKill: number;
   private rowLength: number;
   private poweredUp: boolean;
+  private bulletSpeed: number = 100;
 
   /* Phaser body type workaround */
   body!: Phaser.Physics.Arcade.Body;
@@ -49,24 +50,27 @@ export class Enemy extends Phaser.GameObjects.Sprite {
           this.dyingTime = 160;
           this.enemyTint = 0xc93c3c;
           this.lives = 2;
-          this.reloadTime = 1000;
+          this.reloadTime = 80;
           this.valueKill = 100;
+          this.bulletSpeed = 200;
           break;
 
         case "crab":
           this.dyingTime = 180;
           this.enemyTint = 0xd16634;
           this.lives = 3;
-          this.reloadTime = 2000;
+          this.reloadTime = 120;
           this.valueKill = 150;
+          this.bulletSpeed = 250;
           break;
 
         case "squid":
           this.dyingTime = 200;
           this.enemyTint = 0xdb0700;
           this.lives = 4;
-          this.reloadTime = 1500;
+          this.reloadTime = 140;
           this.valueKill = 200;
+          this.bulletSpeed = 300;
           break;
       }
     }else {
@@ -121,7 +125,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
       },
       yoyo: true,
       onYoyo: () => {
-        this.y += 10;
+        this.y += 15;
       },
     });
   }
@@ -138,7 +142,7 @@ export class Enemy extends Phaser.GameObjects.Sprite {
             y: this.y,
             key: "bullet",
             bulletProperties: {
-              speed: this.poweredUp ? 200 : 100
+              speed: this.bulletSpeed
             }
           })
         );

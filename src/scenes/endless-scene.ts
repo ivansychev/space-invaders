@@ -99,7 +99,8 @@ export class EndlessScene extends Phaser.Scene {
 
     private rocketHitsEnemy(rocket, enemy): void {
         if(rocket.madeHit()){
-            //do nothing
+            // TODO: review this logic later
+            enemy.gotHurt();
         } else{
             rocket.initiateDestroySequence();
             enemy.gotHurt();
@@ -116,7 +117,7 @@ export class EndlessScene extends Phaser.Scene {
     }
 
     private getRandomPositiveInt(max): number {
-        return Math.floor(Math.random() * Math.floor(max));
+        return Math.ceil(Math.random() * Math.floor(max));
     }
 
     private randomEnemySpawnInterval(): number {
@@ -126,7 +127,9 @@ export class EndlessScene extends Phaser.Scene {
     private spawnRandomEnemies(): void{
         const enemyTypes = ["octopus", "crab", "squid"];
         const enemyRowLength = this.getRandomPositiveInt(10);
-        for (let y = 0; y < 10; y++) {
+        const enemyColLength = this.getRandomPositiveInt(2);
+
+        for (let y = 0; y < enemyColLength; y++) {
             for (let x = 0; x < enemyRowLength; x++) {
                 let type = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
                 this.enemies.add(
@@ -136,7 +139,7 @@ export class EndlessScene extends Phaser.Scene {
                         y: 10 + y * 15,
                         key: type,
                         rowLength: enemyRowLength,
-                        poweredUp: Math.random() > 0.85,
+                        poweredUp: Math.random() > 0.875,
                     })
                 );
             }
