@@ -82,7 +82,7 @@ export class MenuScene extends Phaser.Scene {
           clearTimeout(this.interval);
           this.bitmapTexts = [];
           this.registry.set("endless", "*endless mode");
-          this.registry.set("rockets", "rockets: ");
+          this.registry.set("rockets", "(r)rockets: ");
           this.registry.set("ammo", 3);
           this.scene.start("HUDScene");
           this.scene.start("EndlessScene");
