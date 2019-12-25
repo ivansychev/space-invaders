@@ -81,7 +81,9 @@ export class MenuScene extends Phaser.Scene {
       if (this.startKey_Endless.isDown) {
           clearTimeout(this.interval);
           this.bitmapTexts = [];
-          this.registry.set("endless", "*endless mode")
+          this.registry.set("endless", "*endless mode");
+          this.registry.set("rockets", "rockets: ");
+          this.registry.set("ammo", 3);
           this.scene.start("HUDScene");
           this.scene.start("EndlessScene");
           this.scene.bringToTop("HUDScene");
@@ -102,6 +104,8 @@ export class MenuScene extends Phaser.Scene {
    * Here we initialize our variables with a key.
    */
   private initRegistry(): void {
+      this.registry.set("rockets", "");
+      this.registry.set("ammo", "");
       this.registry.set("endless", "");
       this.registry.set("points", 0);
       this.registry.set("lives", 3);

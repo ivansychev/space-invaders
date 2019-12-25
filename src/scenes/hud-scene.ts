@@ -43,6 +43,16 @@ export class HUDScene extends Phaser.Scene {
         )
     );
 
+    this.bitmapTexts.push(
+        this.add.bitmapText(
+            this.scene.systems.canvas.width - 90,
+            this.scene.systems.canvas.height - 20,
+            "font",
+            `${this.registry.get("rockets")}${this.registry.get("ammo")}`,
+            8
+        )
+    );
+
     this.bitmapTexts[2].tint = 0xde4747;
 
     // create events
@@ -53,6 +63,7 @@ export class HUDScene extends Phaser.Scene {
     const endless = this.scene.get("EndlessScene");
     endless.events.on("pointsChanged", this.updatePoints, this);
     endless.events.on("livesChanged", this.updateLives, this);
+    endless.events.on("ammoChanged", this.updateAmmo, this);
   }
 
   private updatePoints() {
@@ -61,5 +72,9 @@ export class HUDScene extends Phaser.Scene {
 
   private updateLives() {
     this.bitmapTexts[0].setText(`Lives: ${this.registry.get("lives")}`);
+  }
+
+  private updateAmmo() {
+    this.bitmapTexts[3].setText(`${this.registry.get("rockets")}${this.registry.get("ammo")}`);
   }
 }

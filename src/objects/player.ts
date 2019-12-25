@@ -109,7 +109,9 @@ export class Player extends Phaser.GameObjects.Image {
 
   private handleRocketing(): void{
     if (this.rocketKey.isDown && this.scene.time.now > this.lastShoot) {
-      if (this.rockets.getLength() < 1) {
+      if (this.rockets.getLength() < 1 && this.scene.registry.get('ammo') > 0) {
+        this.scene.registry.set('ammo', this.scene.registry.get('ammo') - 1);
+        this.scene.events.emit("ammoChanged");
         this.rockets.add(
             new Rocket({
               scene: this.scene,
