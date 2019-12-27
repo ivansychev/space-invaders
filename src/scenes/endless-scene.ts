@@ -99,7 +99,6 @@ export class EndlessScene extends Phaser.Scene {
 
     private rocketHitsEnemy(rocket, enemy): void {
         if(rocket.madeHit()){
-            // TODO: review this logic later
             enemy.gotHurt();
         } else{
             rocket.initiateDestroySequence();

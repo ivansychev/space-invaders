@@ -85,6 +85,8 @@ export class HUDScene extends Phaser.Scene {
       this.refillStack.push(1)
     }
 
+    //TODO: patch when starting new game rockets are still replenishing
+
     this.bitmapTexts[3].setText(`${this.registry.get("rockets")}${this.registry.get("ammo")}`);
   }
 
@@ -96,7 +98,7 @@ export class HUDScene extends Phaser.Scene {
   update(): void{
     if(!this.isRefilling && this.refillStack.shift()){
       this.isRefilling = true;
-      this.refillAmmo(30, 30)
+      this.refillAmmo(60, 60)
     }
   }
 

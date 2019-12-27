@@ -61,10 +61,11 @@ export class MenuScene extends Phaser.Scene {
               "font",
               "*PRESS R FOR ENDLESS MODE",
               8
-        )
-    );
+          )
+      );
 
     this.bitmapTexts[3].tint = 0xde4747;
+    this.add.text(10, 10, 'v 1.0.1', { font: '10px Arial' });
     this.blinkMenu(1000, 500);
   }
 

@@ -7,7 +7,7 @@ import { EndlessScene } from "./scenes/endless-scene";
 
 const config: Phaser.Types.Core.GameConfig = {
   title: "Space Invaders",
-  version: "1.0",
+  version: "1.0.1",
   width: 300,
   height: 250,
   zoom: 3,
